@@ -1,5 +1,5 @@
 import { Component } from 'react';
-import initialContacs from '../contacts.json';
+// import initialContacs from '../contacts.json';
 import { Box } from './Box/Box.styled';
 import { PhoneBook } from './PhoneBook/PhoneBook.styled';
 import { ContactForm } from './ContactForm/ContactForm';
@@ -7,7 +7,22 @@ import { Filter } from './Filter/Filter';
 import { ContactsList } from './ContactsList/ContactsList';
 
 export class App extends Component {
-  state = { contacts: initialContacs, filter: '' };
+  state = { contacts: [], filter: '' };
+
+  componentDidMount() {
+    const savedContacts = localStorage.getItem('contacts');
+    const parsedContacts = JSON.parse(savedContacts);
+    if (parsedContacts) {
+      this.setState({ contacts: parsedContacts });
+      return;
+    }
+  }
+
+  componentDidUpdate(prevProps, prevState) {
+    if (this.state.contacts !== prevState.contacts) {
+      localStorage.setItem('contacts', JSON.stringify(nextContact));
+    }
+  }
 
   addContact = newContact => {
     const { name, number } = newContact;
